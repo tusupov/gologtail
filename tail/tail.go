@@ -48,8 +48,6 @@ type tail struct {
 	err     chan error
 	done    chan struct{}
 
-	closed  chan struct{}
-
 	debug bool
 	log   *log.Logger
 }
@@ -92,8 +90,6 @@ func New(path string, format int) (t *tail, err error) {
 		line: make(chan string),
 		err:  make(chan error),
 		done: make(chan struct{}),
-
-		closed: make(chan struct{}),
 
 		watcher: watcher,
 
@@ -332,7 +328,7 @@ func (t *tail) Stop() {
 
 func (t *tail) isClosed() bool {
 	select {
-	case <-t.closed:
+	case <-t.done:
 		return true
 	default:
 		return false
