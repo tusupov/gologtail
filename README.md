@@ -74,10 +74,7 @@ func main() {
 	go func() {
 		for {
 			select {
-			case lineItem, ok := <-lineItemCh:
-				if !ok {
-					return
-				}
+			case lineItem := <-lineItemCh:
 				log.Println(lineItem)
 
 			case <-sigChan:
