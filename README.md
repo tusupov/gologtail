@@ -1,7 +1,7 @@
 # GoLogTail
 Parse files with different log formats and insert in MongoDB.
 
-### Usage
+#### Usage
 ```
 $ ./gologtail --help
 usage: gologtail [<flags>]
@@ -18,7 +18,7 @@ Flags:
                                      2 = "2006-01-02T15:04:05Z"
 ```
 
-### Run
+#### Run
 ```
 $ ./gologtail 
 ```
@@ -28,12 +28,12 @@ with flags
 $ echo -e '/logs/test0.log\n/logs/test1.log' ./gologtail --dbh localhost:27017 --dbn logs --dbt logs --dbw 10 -f 1
 ```
 
-## Testing
+### Testing
 ```
 $ docker-compose up
 ```
 
-## Testing
+### Example
 ```go
 package main
 
