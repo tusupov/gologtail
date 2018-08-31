@@ -61,9 +61,10 @@ func main() {
 	wg := &sync.WaitGroup{}
 	lineItemCh := make(chan db.Item)
 
+	wg.Add(1)
+
 	// Enable debug and listen file
 	t.Debug(true)
-	wg.Add(1)
 	go t.Run(wg, lineItemCh)
 
 	sigChan := make(chan os.Signal, 1)
