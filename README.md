@@ -39,6 +39,8 @@ package main
 
 import (
 	"log"
+	"os"
+	"os/signal"
 	"sync"
 
 	"github.com/tusupov/gologtail/db"
@@ -47,29 +49,47 @@ import (
 
 func main() {
 
-	logFilePath := "/logs/test0.log"
+	logFilePath := "/etc/passwd"
 	timeFormat := 1
-	
+
 	// Create new
 	t, err := tail.New(logFilePath, timeFormat)
 	if err != nil {
 		log.Fatal(err)
 	}
-	
+
 	wg := &sync.WaitGroup{}
 	lineItemCh := make(chan db.Item)
-	
-	// Enable debug
-	t.Debug(true)
 
-	// Listen file write
+	// Enable debug and listen file
+	t.Debug(true)
+	wg.Add(1)
 	go t.Run(wg, lineItemCh)
-	
-	// Read line
-	for lineItem := range lineItemCh {
-		log.Println(lineItem)
-	}
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, os.Interrupt)
+
+	// Get lines
+	go func() {
+		for {
+			select {
+			case lineItem, ok := <-lineItemCh:
+				if !ok {
+					return
+				}
+				log.Println(lineItem)
+
+			case <-sigChan:
+				t.Stop()
+				return
+
+			}
+		}
+	}()
+
+	wg.Wait()
+	close(sigChan)
+	close(lineItemCh)
 
 }
-
 ```
