@@ -2,25 +2,25 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"log"
 	"os"
 	"sync"
 
 	"github.com/tusupov/gologtail/db"
 	"github.com/tusupov/gologtail/tail"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
-	dbHost = flag.String(`dbh`, `localhost:27017`, `MongoDB host`)
-	dbName = flag.String(`dbn`, `logs`, `MongoDB database name`)
-	dbTable = flag.String(`dbt`, `logs`, `MongoDB table name`)
-	workers = flag.Int(`dbw`, 10, `Workers for add item to MongoDB`)
-	timeFormat = flag.Int(`format`, 1, `Time format for log files \nValues:\n\t1 - ` + tail.TIME_FORMAT_UTC + `\n\t2 - ` + tail.TIME_FORMAT_TZ + `)`)
+	dbHost = kingpin.Flag(`dbh`, `MongoDB host`).Default(`localhost:27017`).String()
+	dbName = kingpin.Flag(`dbn`, `MongoDB database name`).Default(`logs`).String()
+	dbTable = kingpin.Flag(`dbt`, `MongoDB table name`).Default(`logs`).String()
+	workers = kingpin.Flag(`dbw`, `Workers for add item to MongoDB`).Default("10").Int()
+	timeFormat = kingpin.Flag(`format`, "Time format for log files\n Values:\n\t1 = \"" + tail.TIME_FORMAT_UTC + "\"\n\t2 = \"" + tail.TIME_FORMAT_TZ + "\"").Short('f').Default("1").Int()
 )
 
 func init() {
-	flag.Parse()
+	kingpin.Parse()
 }
 
 func main()  {

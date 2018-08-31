@@ -18,4 +18,4 @@ WORKDIR /app/
 COPY --from=0 /go/src/github.com/tusupov/gologtail/gologtail .
 
 # run app
-CMD echo -e $LOGS_LIST | ./gologtail -dbh $DB_HOST:$DB_PORT -dbn $DB_NAME -dbt $DB_TABLE -dbw $DB_WORKERS -format $LOGS_FORMAT
+CMD echo -e $LOGS_LIST | ./gologtail --dbh $DB_HOST:$DB_PORT --dbn $DB_NAME --dbt $DB_TABLE --dbw $DB_WORKERS -f $LOGS_FORMAT

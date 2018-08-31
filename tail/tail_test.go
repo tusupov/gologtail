@@ -14,7 +14,7 @@ import (
 
 var (
 	testLogFileDir = "test/"
-	testMsg        = strings.Repeat("a", 100)
+	testMsg        = strings.Repeat("a", 10)
 	testMsgCnt     = int(1e2)
 	testFilesCnt   = int(10)
 )
