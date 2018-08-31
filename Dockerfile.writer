@@ -1,0 +1,18 @@
+FROM golang:1.11
+
+# copy project
+WORKDIR /go/src/github.com/tusupov/gologtail
+COPY . ./
+
+# build writer
+WORKDIR /go/src/github.com/tusupov/gologtail/writer
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o gowriter .
+
+FROM alpine:latest
+
+# copy app
+WORKDIR /app/
+COPY --from=0 /go/src/github.com/tusupov/gologtail/writer/gowriter .
+
+# create/write logs
+CMD echo -e $LOGS_LIST | ./gowriter -format $LOGS_FORMAT
